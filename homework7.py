@@ -26,7 +26,7 @@ class Phone(Field):
 class Birthday(Field):
     def __init__(self, value):
         try:
-            birthday_date = datetime.strptime(value, '%d.%m.%Y')
+            datetime.strptime(value, '%d.%m.%Y')
             self.value = value
         except ValueError:
             raise ValueError("Invalid date format. Use DD.MM.YYYY.")
@@ -85,12 +85,15 @@ class AddressBook(UserDict):
 
         for record in self.data.values():
             if record.birthday:
-                birthday_this_year = record.birthday.value.replace(year=today.year)
+                birthday_date = datetime.strptime(record.birthday.value, '%d.%m.%Y').date()
+                birthday_this_year = birthday_date.replace(year=today.year)
 
                 if birthday_this_year < today:
-                    birthday_this_year = birthday_this_year.replace(year=today.year + 1)
+                    birthday_this_year = birthday_date.replace(year=today.year + 1)
+
+                days_until_birthday = (birthday_this_year - today).days
                 
-                if 0 <= (birthday_this_year - today).days <= days:
+                if 0 <= days_until_birthday <= days:
                     congratulation_date = adjust_for_weekend(birthday_this_year)
                     upcoming_birthdays.append({"name": record.name.value, "congratulation_date": congratulation_date.strftime('%d.%m.%Y')})
 
@@ -152,7 +155,7 @@ def change_contact(args, book: AddressBook):
     if record:
         record.edit_phone(old_phone, new_phone)
         return "Contact changed."
-    return "Contact changed."
+    return "Contact not found."
 
 @input_error
 def show_phone_num(args, book: AddressBook):
