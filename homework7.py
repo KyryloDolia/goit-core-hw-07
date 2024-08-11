@@ -99,7 +99,6 @@ class AddressBook(UserDict):
 
         return upcoming_birthdays
 
-
     def __str__(self):
         return "\n".join(str(record) for record in self.data.values())
 
@@ -123,7 +122,7 @@ def input_error(func):
         try:
             return func(*args, **kwargs)
         except ValueError:
-            return "Give me name and phone please."
+            return "Enter name and phone/birthday please."
         except KeyError:
             return "Please enter username."
         except IndexError:
