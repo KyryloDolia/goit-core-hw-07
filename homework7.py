@@ -183,7 +183,7 @@ def show_birthday(args, book: AddressBook):
     name = args[0]
     record = book.find(name)
     if record and record.birthday:
-        return record.birthday.value.strftime('%d.%m.%Y')
+        return record.birthday.value
     return "No birthday found for this contact."
 
 @input_error
@@ -235,5 +235,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
